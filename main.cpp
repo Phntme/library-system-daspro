@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 
 int main() {
@@ -8,7 +9,7 @@ int main() {
 
 
     // data
-    string buku[4] = {"kalkulus","fisika","daspro","sistemOperasi"}; // daftar buku
+    vector<string> buku = {"kalkulus","fisika","daspro","sistemOperasi"}; // daftar buku
     bool statusBuku[4] = {false,false,false,false}; // status pinjaman buku, false = buku tersedia
 
     do
@@ -22,6 +23,7 @@ int main() {
         cin >> pilihanUser;
 
         cout << "user memilih" << pilihanUser << endl;
+
     } while (pilihanUser != 4);
     
 
