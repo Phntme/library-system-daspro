@@ -4,6 +4,7 @@ using namespace std;
 
 int main() {
     
+    string namaPeminjam;
     int hariMeminjam = 0;
     int pilihanUser; // penampung pilihan user
 
@@ -40,6 +41,30 @@ int main() {
             }
 
             cout << endl;
+            
+        } else if (pilihanUser == 2) {
+            int nomorMeminjam;
+            cout << "============" << endl;
+            cout << "PINJAM BUKU" << endl;
+            cout << "============" << endl;
+            cout << endl;
+            cout << "Masukkan Nama Peminjam: ";
+            cin >> namaPeminjam;
+            for (int i = 0; i < daftarBuku.size(); i++)
+            {
+                cout << i + 1 << "." << daftarBuku[i] << endl;
+            }
+            cout << "Pilih buku yang ingin dipinjam: ";
+            cin >> nomorMeminjam;
+
+            if (statusBuku[nomorMeminjam - 1] == true)
+            {
+                cout << "Buku tidak tersedia untuk dipinjam!";
+            } else {
+                cout << "Kamu berhasil meminjam buku [" << daftarBuku[nomorMeminjam - 1] << "]!" << endl;
+                statusBuku[nomorMeminjam - 1] = true;
+
+            }
             
         }
 
