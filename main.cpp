@@ -30,7 +30,13 @@ int main() {
             cout << "============" << endl;
             for (int i = 0; i < daftarBuku.size(); i++)
             {
-                cout << i + 1 << "." << daftarBuku[i] << endl;
+                if(statusBuku[i] == false) {
+
+                    cout << i + 1 << "." << daftarBuku[i] << " [TERSEDIA]" << endl;
+                } else {
+                    cout << i + 1 << "." << daftarBuku[i] << " [TIDAK TERSEDIA]" << endl;
+
+                }
             }
 
             cout << endl;
