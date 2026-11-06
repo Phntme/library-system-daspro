@@ -12,7 +12,7 @@ int main() {
 
     // data
     vector<string> daftarBuku = {"kalkulus","fisika","daspro","sistemOperasi"}; // daftar buku
-    bool statusBuku[4] = {false,false,false,false}; // status pinjaman buku, false = buku tersedia
+    vector<bool> statusBuku = {false,false,false,false}; // status pinjaman buku, false = buku tersedia
 
     do
     {
@@ -73,6 +73,28 @@ int main() {
                 statusBuku[nomorMeminjam - 1] = true;
 
             }
+            
+        } else if (pilihanUser == 3) {
+            // kembalikan buku
+            cout << "============" << endl;
+            cout << "KEMBALIKAN BUKU" << endl;
+            cout << "============" << endl;
+            cout << endl;
+            
+            bool bukuAktif = false;
+            for (int i = 0; i < statusBuku.size(); i++)
+            {
+                if (statusBuku[i] == true)
+                {
+                    bukuAktif = true;
+                    cout << "buku " << daftarBuku[i] << " dipinjam" << endl;
+                }
+                
+            }
+            if (!bukuAktif) {
+                cout << "tidak ada buku yang dipinjam" << endl;
+                cout << endl;
+                }
             
         }
 
