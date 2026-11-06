@@ -15,6 +15,7 @@ int main() {
 
     do
     {
+        // daftar menu
         cout << "=== Selamat datang di sistem manajemen Perpustakaan ===" << endl;
         cout << "1. Daftar Buku" << endl;
         cout << "2. Pinjam Buku" << endl;
@@ -26,6 +27,7 @@ int main() {
         cout << endl;
 
         if (pilihanUser == 1) {
+            // pilihan 1
             cout << "============" << endl;
             cout << "DAFTAR BUKU" << endl;
             cout << "============" << endl;
@@ -43,6 +45,7 @@ int main() {
             cout << endl;
             
         } else if (pilihanUser == 2) {
+            // pilihan 2
             int nomorMeminjam;
             cout << "============" << endl;
             cout << "PINJAM BUKU" << endl;
