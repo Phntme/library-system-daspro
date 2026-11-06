@@ -6,6 +6,7 @@ int main() {
     
     string namaPeminjam;
     int hariMeminjam = 0;
+    int hariPengembalian = 0;
     int pilihanUser; // penampung pilihan user
 
 
@@ -64,7 +65,11 @@ int main() {
             {
                 cout << "Buku tidak tersedia untuk dipinjam!";
             } else {
-                cout << "Kamu berhasil meminjam buku [" << daftarBuku[nomorMeminjam - 1] << "]!" << endl;
+                cout << "Masukkan hari pengembalian (misal: 5) :";
+                cin >> hariMeminjam;
+                cout << "Buku [ " << daftarBuku[nomorMeminjam - 1] << " ]" <<" berhasil dipinjam oleh " << namaPeminjam << endl;
+                cout << "batas pengembalian buku adalah hari ke " << hariMeminjam + 7 << endl; // batas pengembalian 7 hari
+                cout << endl;
                 statusBuku[nomorMeminjam - 1] = true;
 
             }
