@@ -82,15 +82,19 @@ int main() {
             cout << endl;
             
             bool bukuAktif = false;
+
+            // cek apakah ada buku yang dipinjam
             for (int i = 0; i < statusBuku.size(); i++)
             {
+                // ada buku dipinjam, cetak informasi nama buku yang dipinjam
                 if (statusBuku[i] == true)
                 {
                     bukuAktif = true;
-                    cout << "buku " << daftarBuku[i] << " dipinjam" << endl;
+                    cout << "buku [" << daftarBuku[i] << "] dipinjam" << endl;
                 }
                 
             }
+            // tidak ada buku yang dipinjam
             if (!bukuAktif) {
                 cout << "tidak ada buku yang dipinjam" << endl;
                 cout << endl;
