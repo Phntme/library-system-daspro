@@ -2,16 +2,35 @@
 #include <vector>
 using namespace std;
 
+struct Peminjaman {
+    string nama;
+    string buku;
+    int tanggal;
+    int bulan;
+    int tahun;
+    int totalPinjam;
+    bool sudahKembali;
+};
+
 int main() {
     
     string namaPeminjam;
     int hariMeminjam = 0;
-    int hariPengembalian = 0;
     int pilihanUser; // penampung pilihan user
+    int tanggal[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    int totalPinjam = 0;
+    int totalKemb = 0;
+    int tanggalPinjam;
+    int bulanPinjam;
+    int tahunPinjam;
+    int tanggalKemb;
+    int bulanKemb;
+    int tahunKemb;
 
 
     // data
-    vector<string> daftarBuku = {"kalkulus","fisika","daspro","sistemOperasi"}; // daftar buku
+    vector<Peminjaman> daftarPeminjam;
+    vector<string> daftarBuku = {"Kalkulus","Fisika","Dasar Pemrograman","Sistem Operasi"}; // daftar buku
     vector<bool> statusBuku = {false,false,false,false}; // status pinjaman buku, false = buku tersedia
 
     do
@@ -65,41 +84,99 @@ int main() {
             {
                 cout << "Buku tidak tersedia untuk dipinjam!";
             } else {
-                cout << "Masukkan hari pengembalian (misal: 5) :";
-                cin >> hariMeminjam;
-                cout << "Buku [ " << daftarBuku[nomorMeminjam - 1] << " ]" <<" berhasil dipinjam oleh " << namaPeminjam << endl;
-                cout << "batas pengembalian buku adalah hari ke " << hariMeminjam + 7 << endl; // batas pengembalian 7 hari
-                cout << endl;
-                statusBuku[nomorMeminjam - 1] = true;
+                cout << "Masukkan tanggal peminjaman" << endl;
+                cin >> tanggalPinjam;
+                cout << "Masukkan bulan peminjaman" << endl;
+                cin >> bulanPinjam;
+                cout << "Masukkan tahun peminjaman" << endl;
+                cin >> tahunPinjam;
 
+                totalPinjam = ((tahunPinjam - 1) * 365) + tanggalPinjam;
+                for (int i = 0; i < bulanPinjam - 1; i++) {
+                     totalPinjam += tanggal[i];
+                }         
+            
+                
+                daftarPeminjam.push_back( {
+                    namaPeminjam,
+                    daftarBuku[nomorMeminjam - 1],
+                    tanggalPinjam,
+                    bulanPinjam,
+                    tahunPinjam,
+                    totalPinjam,
+                    false
+                });
+                
+                cout << "Kamu berhasil meminjam buku [" << daftarBuku[nomorMeminjam - 1] << "]!" << endl;
+                statusBuku[nomorMeminjam - 1] = true;
+                cout << "Terima Kasih telah meminjam buku di Perpustakaan Gratis" << endl;
+                cout << "Maksimal pengembalian buku 7 hari dari hari peminjaman :)" << endl;
             }
+            cout << endl;
             
         } else if (pilihanUser == 3) {
             // kembalikan buku
-            cout << "============" << endl;
-            cout << "KEMBALIKAN BUKU" << endl;
-            cout << "============" << endl;
-            cout << endl;
+            string namaCari;
             
-            bool bukuAktif = false;
+            cout << "=================" << endl;
+            cout << "PENGEMBALIAN BUKU" << endl;
+            cout << "=================" << endl;
+            cout << " " << endl;
 
-            // cek apakah ada buku yang dipinjam
-            for (int i = 0; i < statusBuku.size(); i++)
-            {
-                // ada buku dipinjam, cetak informasi nama buku yang dipinjam
-                if (statusBuku[i] == true)
-                {
-                    bukuAktif = true;
-                    cout << "buku [" << daftarBuku[i] << "] dipinjam" << endl;
-                }
-                
-            }
-            // tidak ada buku yang dipinjam
-            if (!bukuAktif) {
-                cout << "tidak ada buku yang dipinjam" << endl;
-                cout << endl;
-                }
+            cout << "Masukkan nama peminjam: ";
+            cin >> namaCari;
+            bool ditemukan = false;
             
+            for (int i = 0; i < daftarPeminjam.size(); i++) {
+                if (daftarPeminjam[i].nama == namaCari && daftarPeminjam[i].sudahKembali == false) {
+                    ditemukan = true;
+                    cout << "Buku yang dipinjam: " << daftarPeminjam[i].buku << endl;
+
+                    cout << "Masukkan tanggal" << endl;
+                    cin >> tanggalKemb;
+
+                    cout << "Masukkan bulan" << endl;
+                    cin >> bulanKemb;
+
+                    cout << "Masukkan tahun" << endl;
+                    cin >> tahunKemb;
+
+            
+    
+                    totalKemb = ((tahunKemb - 1) * 365) + tanggalKemb;
+                    for (int j = 0; j < bulanKemb - 1; j++) {
+                        totalKemb += tanggal[j];
+                    }
+                    int lamaPinjam = totalKemb - daftarPeminjam[i].totalPinjam;
+                    int terlambat = lamaPinjam - 7;
+                    if (terlambat < 0) {
+                        terlambat = 0;
+                    }
+                    int denda = terlambat * 2000;
+                    cout << "Lama peminjaman: " << lamaPinjam << " hari" << endl;
+            
+                    if (terlambat > 0) {
+                        cout << "Anda terlambat selama " << terlambat << " hari" << endl;
+                        cout << "Denda yang harus dibayar: Rp." << denda << endl;
+                    }else{
+                        cout << "Terimakasih sudah mengembalikan buku tepat waktu ;)" << endl;
+                    }
+                    daftarPeminjam[i].sudahKembali = true;
+                    // Mengubah status ketersediaan buku
+                    for (int j = 0; j < daftarBuku.size(); j++) {
+                        if (daftarBuku[j] == daftarPeminjam[i].buku) {
+                            statusBuku[j] = false;
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+
+            if (!ditemukan) {
+                cout << "Data peminjam tidak ditemukan!" << endl;
+            }
+            cout << " " << endl;
         }
 
     } while (pilihanUser != 4);
