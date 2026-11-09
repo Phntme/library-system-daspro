@@ -6,12 +6,13 @@ int main() {
     
     string namaPeminjam;
     int hariMeminjam = 0;
+    int hariPengembalian = 0;
     int pilihanUser; // penampung pilihan user
 
 
     // data
     vector<string> daftarBuku = {"kalkulus","fisika","daspro","sistemOperasi"}; // daftar buku
-    bool statusBuku[4] = {false,false,false,false}; // status pinjaman buku, false = buku tersedia
+    vector<bool> statusBuku = {false,false,false,false}; // status pinjaman buku, false = buku tersedia
 
     do
     {
@@ -64,10 +65,40 @@ int main() {
             {
                 cout << "Buku tidak tersedia untuk dipinjam!";
             } else {
-                cout << "Kamu berhasil meminjam buku [" << daftarBuku[nomorMeminjam - 1] << "]!" << endl;
+                cout << "Masukkan hari pengembalian (misal: 5) :";
+                cin >> hariMeminjam;
+                cout << "Buku [ " << daftarBuku[nomorMeminjam - 1] << " ]" <<" berhasil dipinjam oleh " << namaPeminjam << endl;
+                cout << "batas pengembalian buku adalah hari ke " << hariMeminjam + 7 << endl; // batas pengembalian 7 hari
+                cout << endl;
                 statusBuku[nomorMeminjam - 1] = true;
 
             }
+            
+        } else if (pilihanUser == 3) {
+            // kembalikan buku
+            cout << "============" << endl;
+            cout << "KEMBALIKAN BUKU" << endl;
+            cout << "============" << endl;
+            cout << endl;
+            
+            bool bukuAktif = false;
+
+            // cek apakah ada buku yang dipinjam
+            for (int i = 0; i < statusBuku.size(); i++)
+            {
+                // ada buku dipinjam, cetak informasi nama buku yang dipinjam
+                if (statusBuku[i] == true)
+                {
+                    bukuAktif = true;
+                    cout << "buku [" << daftarBuku[i] << "] dipinjam" << endl;
+                }
+                
+            }
+            // tidak ada buku yang dipinjam
+            if (!bukuAktif) {
+                cout << "tidak ada buku yang dipinjam" << endl;
+                cout << endl;
+                }
             
         }
 
