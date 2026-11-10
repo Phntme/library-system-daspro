@@ -1,5 +1,8 @@
 #include <iostream>
 #include <vector>
+#include <string>
+#include <algorithm>
+#include <cctype>
 using namespace std;
 
 struct Peminjaman {
@@ -12,10 +15,16 @@ struct Peminjaman {
     bool sudahKembali;
 };
 
+// ubah string jadi huruf kecil (untuk pencarian tidak peka huruf besar/kecil)
+string keHurufKecil(string s) {
+    transform(s.begin(), s.end(), s.begin(),
+              [](unsigned char c) { return tolower(c); });
+    return s;
+}
+
 int main() {
-    
+
     string namaPeminjam;
-    int hariMeminjam = 0;
     int pilihanUser; // penampung pilihan user
     int tanggal[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     int totalPinjam = 0;
@@ -26,7 +35,6 @@ int main() {
     int tanggalKemb;
     int bulanKemb;
     int tahunKemb;
-
 
     // data
     vector<Peminjaman> daftarPeminjam;
@@ -40,9 +48,10 @@ int main() {
         cout << "1. Daftar Buku" << endl;
         cout << "2. Pinjam Buku" << endl;
         cout << "3. Kembalikan Buku" << endl;
-        cout << "4. Keluar" << endl;
+        cout << "4. Cari Buku" << endl;
+        cout << "5. Keluar" << endl;
         cout << "Pilihan Anda: ";
-        cin >> pilihanUser;
+        if (!(cin >> pilihanUser)) break; // hentikan jika input rusak / EOF
 
         cout << endl;
 
@@ -54,16 +63,14 @@ int main() {
             for (int i = 0; i < daftarBuku.size(); i++)
             {
                 if(statusBuku[i] == false) {
-
                     cout << i + 1 << "." << daftarBuku[i] << " [TERSEDIA]" << endl;
                 } else {
                     cout << i + 1 << "." << daftarBuku[i] << " [TIDAK TERSEDIA]" << endl;
-
                 }
             }
 
             cout << endl;
-            
+
         } else if (pilihanUser == 2) {
             // pilihan 2
             int nomorMeminjam;
@@ -80,7 +87,11 @@ int main() {
             cout << "Pilih buku yang ingin dipinjam: ";
             cin >> nomorMeminjam;
 
-            if (statusBuku[nomorMeminjam - 1] == true)
+            if (nomorMeminjam < 1 || nomorMeminjam > (int)daftarBuku.size())
+            {
+                cout << "Nomor buku tidak valid!" << endl;
+            }
+            else if (statusBuku[nomorMeminjam - 1] == true)
             {
                 cout << "Buku tidak tersedia untuk dipinjam!";
             } else {
@@ -94,9 +105,8 @@ int main() {
                 totalPinjam = ((tahunPinjam - 1) * 365) + tanggalPinjam;
                 for (int i = 0; i < bulanPinjam - 1; i++) {
                      totalPinjam += tanggal[i];
-                }         
-            
-                
+                }
+
                 daftarPeminjam.push_back( {
                     namaPeminjam,
                     daftarBuku[nomorMeminjam - 1],
@@ -106,18 +116,18 @@ int main() {
                     totalPinjam,
                     false
                 });
-                
+
                 cout << "Kamu berhasil meminjam buku [" << daftarBuku[nomorMeminjam - 1] << "]!" << endl;
                 statusBuku[nomorMeminjam - 1] = true;
                 cout << "Terima Kasih telah meminjam buku di Perpustakaan Gratis" << endl;
                 cout << "Maksimal pengembalian buku 7 hari dari hari peminjaman :)" << endl;
             }
             cout << endl;
-            
+
         } else if (pilihanUser == 3) {
             // kembalikan buku
             string namaCari;
-            
+
             cout << "=================" << endl;
             cout << "PENGEMBALIAN BUKU" << endl;
             cout << "=================" << endl;
@@ -126,7 +136,7 @@ int main() {
             cout << "Masukkan nama peminjam: ";
             cin >> namaCari;
             bool ditemukan = false;
-            
+
             for (int i = 0; i < daftarPeminjam.size(); i++) {
                 if (daftarPeminjam[i].nama == namaCari && daftarPeminjam[i].sudahKembali == false) {
                     ditemukan = true;
@@ -141,8 +151,6 @@ int main() {
                     cout << "Masukkan tahun" << endl;
                     cin >> tahunKemb;
 
-            
-    
                     totalKemb = ((tahunKemb - 1) * 365) + tanggalKemb;
                     for (int j = 0; j < bulanKemb - 1; j++) {
                         totalKemb += tanggal[j];
@@ -154,7 +162,7 @@ int main() {
                     }
                     int denda = terlambat * 2000;
                     cout << "Lama peminjaman: " << lamaPinjam << " hari" << endl;
-            
+
                     if (terlambat > 0) {
                         cout << "Anda terlambat selama " << terlambat << " hari" << endl;
                         cout << "Denda yang harus dibayar: Rp." << denda << endl;
@@ -177,10 +185,39 @@ int main() {
                 cout << "Data peminjam tidak ditemukan!" << endl;
             }
             cout << " " << endl;
+
+        } else if (pilihanUser == 4) {
+            // cari buku berdasarkan judul
+            string kataKunci;
+
+            cout << "============" << endl;
+            cout << "CARI BUKU" << endl;
+            cout << "============" << endl;
+            cout << "Masukkan judul buku (boleh sebagian): ";
+            cin.ignore(); // buang sisa newline dari input sebelumnya
+            getline(cin, kataKunci);
+
+            string kunciKecil = keHurufKecil(kataKunci);
+            int jumlahDitemukan = 0;
+
+            cout << endl;
+            for (int i = 0; i < daftarBuku.size(); i++) {
+                if (keHurufKecil(daftarBuku[i]).find(kunciKecil) != string::npos) {
+                    jumlahDitemukan++;
+                    cout << i + 1 << "." << daftarBuku[i]
+                         << (statusBuku[i] ? " [TIDAK TERSEDIA]" : " [TERSEDIA]") << endl;
+                }
+            }
+
+            if (jumlahDitemukan == 0) {
+                cout << "Buku dengan judul \"" << kataKunci << "\" tidak ditemukan!" << endl;
+            } else {
+                cout << "Ditemukan " << jumlahDitemukan << " buku." << endl;
+            }
+            cout << endl;
         }
 
-    } while (pilihanUser != 4);
-    
+    } while (pilihanUser != 5);
 
     return 0;
 }
